@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Example from "./Example";
 import MapPage from "./MapPage";
 import Lol from "./Lol";
+import Map from "./Map";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
             </Link>
           </div>
         } />
-        <Route path="/map" element={<MapPage />} />
+        <Route path="/map" element={<Map />} />
       </Routes>
     </Router>
   );
