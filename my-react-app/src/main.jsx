@@ -1,10 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import React from 'react';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import Map from './Map'; // Importa el componente Map
+import './App.css';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <h1>Mallps</h1>
+          <Link to="/map">
+            <button className="boton-entrar">Entrar</button>
+          </Link>
+        </header>
+        <Route path="/map" component={Map} />
+      </div>
+    </Router>
+  );
+}
+
+export default App;
