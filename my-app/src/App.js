@@ -8,7 +8,7 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
-          <h1>Mallp</h1>
+          <h1>Mallp Desarrollo</h1>
           <Link to="/map">
             <button className="boton-entrar">Entrar</button>
           </Link>
