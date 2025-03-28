@@ -2,7 +2,7 @@
 exports.__esModule = true;
 exports.metadata = void 0;
 var google_1 = require("next/font/google");
-require("../../styles/globals.css");
+require("@styles/globals.css");
 var geistSans = google_1.Geist({
     variable: "--font-geist-sans",
     subsets: ["latin"]
