@@ -12,7 +12,8 @@ const Map = () => {
     const map = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://demotiles.maplibre.org/style.json', // Puedes usar otro estilo
-      center: [-75.58777499661787, 6.263433865116909], // Coordenadas de tu centro comercial
+      // center: [-75.58777499661787, 6.263433865116909], // Coordenadas de tu centro comercial
+      center: [-75.59172030798746, 6.178177527057414], // Coordenadas de tu centro comercial
       // center: [-75.5269632, 6.3176704 ], // Coordenadas de tu centro comercial
       zoom: 21, // Nivel de zoom inicial
     });
@@ -23,20 +24,87 @@ const Map = () => {
         data: './out.json',
       });
 
+      // Agregar líneas (LineString)
       map.addLayer({
-        id: 'capa-planos',
-        type: 'line',
-        source: 'planos',
-        layout: {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
+        id: "lines",
+        type: "line",
+        source: "planos",
         paint: {
-          'line-color': '#088', // Color azul para las líneas
-          'line-width': 2 // Ancho de las líneas
-        }
+          "line-color": "#da0000",
+          "line-width": 3,
+        },
       });
 
+      // Agregar polígonos
+      map.addLayer({
+        id: "polygons",
+        type: "fill",
+        source: "planos",
+        paint: {
+          "fill-color": "#0080ff",
+          "fill-opacity": 0.5,
+        },
+        filter: ["==", "$type", "Polygon"],
+      });
+
+      // Agregar bordes a los polígonos
+      map.addLayer({
+        id: "polygon-borders",
+        type: "line",
+        source: "planos",
+        paint: {
+          "line-color": "#0033cc",
+          "line-width": 2,
+        },
+        filter: ["==", "$type", "Polygon"],
+      });
+      // map.addLayer({
+      //   id: 'capa-planos',
+      //   type: 'line',
+      //   source: 'planos',
+      //   layout: {
+      //     'line-join': 'round',
+      //     'line-cap': 'round'
+      //   },
+      //   paint: {
+      //     'line-color': '#088', // Color azul para las líneas
+      //     'line-width': 2 // Ancho de las líneas
+      //   }
+      // });
+      map.addSource('marcador-mall', {
+        type: 'geojson',
+        data: {
+          type: 'Point',
+          coordinates: [-75.59172030798746, 6.178177527057414],
+        },
+      });
+      
+      map.addLayer({
+        id: 'capa-ubicacion-mall',
+        type: 'circle',
+        source: 'marcador-mall',
+        paint: {
+          'circle-radius': 8,
+          'circle-color': '#00fbff',
+        },
+      });
+      map.addSource('marcador-casa', {
+        type: 'geojson',
+        data: {
+          type: 'Point',
+          coordinates: [-75.58778530111002, 6.263452767665115],
+        },
+      });
+      
+      map.addLayer({
+        id: 'capa-ubicacion-casa',
+        type: 'circle',
+        source: 'marcador-casa',
+        paint: {
+          'circle-radius': 8,
+          'circle-color': '#ff5443',
+        },
+      });
       const geolocalizar = () => {
         if ('geolocation' in navigator) {
           navigator.geolocation.watchPosition(

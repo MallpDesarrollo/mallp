@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import Map from './Map';
+import Map from './components/Map';
 import './App.css';
 
 function App() {
