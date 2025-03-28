@@ -1,6 +1,6 @@
 'useClient'
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 // import Location from "../components/Location"; // Importamos el componente
