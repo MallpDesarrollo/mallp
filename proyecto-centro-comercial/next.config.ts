@@ -1,18 +1,7 @@
-// @ts-ignore
-import type { NextConfig } from "next";
-import withPWA from "next-pwa";
-
-
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true, // ✅ Esto pertenece a Next.js
+  reactStrictMode: true,
+  swcMinify: true,
 };
 
-export default withPWA({
-  ...nextConfig, // ✅ Pasamos la configuración de Next.js
-  pwa: {
-    dest: "public",
-    disable: process.env.NODE_ENV === "development",
-  },
-});
-
-
+export default nextConfig;
