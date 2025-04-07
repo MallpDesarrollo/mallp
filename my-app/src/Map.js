@@ -11,7 +11,7 @@ const Map = () => {
   const location = useLocationURL();
 
   useEffect(() => {
-    const map = new maplibregl.Map({
+    map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://demotiles.maplibre.org/style.json', // Puedes usar otro estilo
       center: [-75.58777499661787, 6.263433865116909], // Coordenadas de tu centro comercial
@@ -20,13 +20,13 @@ const Map = () => {
 
     });
 
-    map.on('load', () => {
+    map.current.on('load', () => {
       map.addSource('planos', {
         type: 'geojson',
         data: './out.json',
       });
 
-      map.addLayer({
+      map.current.addLayer({
         id: 'capa-planos',
         type: 'line',
         source: 'planos',
@@ -70,14 +70,17 @@ const Map = () => {
     return () => map.remove();
   }, [location]);
 
+
   const irAUbicacion = () => {
+    console.log('irAUbicacion fue llamada');
     if ('geolocation' in navigator && map.current) {
+      console.log('JAJA');
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           map.current.flyTo({
             center: [longitude, latitude],
-            zoom: 16,
+            zoom: 20,
           });
         },
         (error) => {
@@ -85,7 +88,8 @@ const Map = () => {
         }
       );
     } else {
-      console.error('Geolocalización no disponible o mapa no inicializado.');
+      console.log('Geolocalización no disponible o mapa no inicializado JAJA.');
+      console.error('Geolocalización no disponible o mapa no inicializado JAJA')
     }
   };
 
@@ -119,6 +123,7 @@ const Map = () => {
   //   }
   // };
 
+  console.log('Componente Map renderizado');
   return (
     <div>
       <div ref={mapContainer} style={{ width: '100%', height: '500px' }} />

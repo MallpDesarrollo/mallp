@@ -6,10 +6,10 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 const Map = () => {
   const mapContainer = useRef(null);
   const map = useRef(null); // Usamos useRef para el mapa
-  // let ubicacionUsuario = null;
+  let ubicacionUsuario = null;
 
   useEffect(() => {
-    const map = new maplibregl.Map({
+    map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://demotiles.maplibre.org/style.json', // Puedes usar otro estilo
       // center: [-75.58777499661787, 6.263433865116909], // Coordenadas de tu centro comercial
@@ -18,14 +18,14 @@ const Map = () => {
       zoom: 21, // Nivel de zoom inicial
     });
 
-    map.on('load', () => {
-      map.addSource('planos', {
+    map.current.on('load', () => {
+      map.current.addSource('planos', {
         type: 'geojson',
         data: './out.json',
       });
 
       // Agregar líneas (LineString)
-      map.addLayer({
+      map.current.addLayer({
         id: "lines",
         type: "line",
         source: "planos",
@@ -36,7 +36,7 @@ const Map = () => {
       });
 
       // Agregar polígonos
-      map.addLayer({
+      map.current.addLayer({
         id: "polygons",
         type: "fill",
         source: "planos",
@@ -48,7 +48,7 @@ const Map = () => {
       });
 
       // Agregar bordes a los polígonos
-      map.addLayer({
+      map.current.addLayer({
         id: "polygon-borders",
         type: "line",
         source: "planos",
@@ -71,7 +71,7 @@ const Map = () => {
       //     'line-width': 2 // Ancho de las líneas
       //   }
       // });
-      map.addSource('marcador-mall', {
+      map.current.addSource('marcador-mall', {
         type: 'geojson',
         data: {
           type: 'Point',
@@ -79,7 +79,7 @@ const Map = () => {
         },
       });
       
-      map.addLayer({
+      map.current.addLayer({
         id: 'capa-ubicacion-mall',
         type: 'circle',
         source: 'marcador-mall',
@@ -88,7 +88,7 @@ const Map = () => {
           'circle-color': '#00fbff',
         },
       });
-      map.addSource('marcador-casa', {
+      map.current.addSource('marcador-casa', {
         type: 'geojson',
         data: {
           type: 'Point',
@@ -96,7 +96,7 @@ const Map = () => {
         },
       });
       
-      map.addLayer({
+      map.current.addLayer({
         id: 'capa-ubicacion-casa',
         type: 'circle',
         source: 'marcador-casa',
@@ -126,17 +126,20 @@ const Map = () => {
       
     });
 
-    return () => map.remove();
+    return () => map.current.remove();
   }, []);
 
   const irAUbicacion = () => {
-    if ('geolocation' in navigator && map.current) {
+    console.log('irAUbicacion fue llamada');
+    if ('geolocation' in navigator && map) {
+      console.log('entro al if');
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          console.log('asigno valores', longitude, latitude);
           map.current.flyTo({
             center: [longitude, latitude],
-            zoom: 16,
+            zoom: 20,
           });
         },
         (error) => {
@@ -144,29 +147,29 @@ const Map = () => {
         }
       );
     } else {
-      console.error('Geolocalización no disponible o mapa no inicializado.');
+      console.error('Geolocalización no xdisponible o mapa no inicializado. JAJA');
     }
   };
 
   // Función para actualizar la ubicación en el mapa
   const actualizarUbicacion = (longitude, latitude, map) => {
     console.log(longitude, latitude, map);
-    if (map.getSource('ubicacion-usuario')) {
+    if (map.current.getSource('ubicacion-usuario')) {
       // Actualizar las coordenadas de la fuente de datos GeoJSON existente
-      map.getSource('ubicacion-usuario').setData({
+      map.current.getSource('ubicacion-usuario').setData({
         type: 'Point',
         coordinates: [longitude, latitude],
       });
     } else {
       // Crear una nueva fuente de datos GeoJSON y agregarla al mapa
-      map.addSource('ubicacion-usuario', {
+      map.current.addSource('ubicacion-usuario', {
         type: 'geojson',
         data: {
           type: 'Point',
           coordinates: [longitude, latitude],
         },
       });
-      map.addLayer({
+      map.current.addLayer({
         id: 'capa-ubicacion-usuario',
         type: 'circle',
         source: 'ubicacion-usuario',
