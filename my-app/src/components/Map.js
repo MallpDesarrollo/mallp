@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 // import { geo } from "./assets/out.json"
@@ -6,6 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 const Map = () => {
   const mapContainer = useRef(null);
   const map = useRef(null); // Usamos useRef para el mapa
+  const [loading, setLoading] = useState(false); // Estado para manejar la carga
   let ubicacionUsuario = null;
 
   useEffect(() => {
@@ -131,8 +132,9 @@ const Map = () => {
 
   const irAUbicacion = () => {
     console.log('irAUbicacion fue llamada');
-    if ('geolocation' in navigator && map) {
+    if ('geolocation' in navigator && map.current) {
       console.log('entro al if');
+      setLoading(true); // Mostrar indicador de carga
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -141,9 +143,11 @@ const Map = () => {
             center: [longitude, latitude],
             zoom: 20,
           });
+          setLoading(false); // Ocultar indicador de carga
         },
         (error) => {
           console.error('Error al obtener la ubicación:', error);
+          setLoading(false); // Ocultar indicador de carga
         }
       );
     } else {
@@ -185,6 +189,7 @@ const Map = () => {
     <div>
       <div ref={mapContainer} style={{ width: '100%', height: '500px' }} />
       <button onClick={irAUbicacion}>Ir a mi ubicación</button>
+        {loading ? 'Obteniendo ubicación...' : ''}
     </div>
   );
 };
