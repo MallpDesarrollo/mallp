@@ -135,7 +135,7 @@ const Map = () => {
     if ('geolocation' in navigator && map.current) {
       console.log('entro al if');
       setLoading(true); // Mostrar indicador de carga
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           console.log('asigno valores', longitude, latitude);
@@ -148,7 +148,8 @@ const Map = () => {
         (error) => {
           console.error('Error al obtener la ubicación:', error);
           setLoading(false); // Ocultar indicador de carga
-        }
+        },
+        { enableHighAccuracy: true } // Activar alta precisión
       );
     } else {
       console.error('Geolocalización no xdisponible o mapa no inicializado. JAJA');
