@@ -190,7 +190,7 @@ const Map = () => {
     <div>
       <div ref={mapContainer} style={{ width: '100%', height: '500px' }} />
       <button onClick={irAUbicacion}>Ir a mi ubicación</button>
-        {loading ? 'Obteniendo ubicación...' : ''}
+        {loading ? ' Obteniendo ubicación...' : ''}
     </div>
   );
 };
